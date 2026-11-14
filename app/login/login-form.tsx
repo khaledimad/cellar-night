@@ -9,6 +9,7 @@ export function LoginForm() {
   const [signInState, signInAction, signingIn] = useActionState(signIn, initial);
   const [signUpState, signUpAction, signingUp] = useActionState(signUp, initial);
   const error = signInState.error ?? signUpState.error;
+  const email = signInState.email ?? signUpState.email ?? "";
   const busy = signingIn || signingUp;
 
   return (
@@ -20,6 +21,7 @@ export function LoginForm() {
           type="email"
           required
           autoComplete="email"
+          defaultValue={email}
           className="rounded border border-zinc-300 bg-transparent px-3 py-2 text-base dark:border-zinc-700"
         />
       </label>
