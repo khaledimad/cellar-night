@@ -4,7 +4,7 @@ For comedy fans who want to catch their favourite comedians at the Comedy Cellar
 
 ## Links
 
-- Live app: to be added
+- Live app: https://cellar-night.vercel.app
 - Repo: https://github.com/khaledimad/cellar-night
 
 ## What works
