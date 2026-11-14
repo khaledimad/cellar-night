@@ -9,7 +9,7 @@ Cellar Night is for comedy fans who want to catch their favourite comedians at t
 A star is the alert. There is no separate favourites list, alert list or settings screen.
 
 - Repo: https://github.com/khaledimad/cellar-night
-- Live address: https://cellar-night.vercel.app
+- Live address: https://www.whosatthecellar.com (also https://cellar-night.vercel.app)
 
 ## Stack
 

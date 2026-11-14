@@ -72,7 +72,7 @@ async function Night({ searchParams }: { searchParams: SearchParams }) {
               key={d}
               href={nightHref(d, hide)}
               aria-current={selected ? "date" : undefined}
-              className={`flex min-w-12 flex-col items-center rounded border px-2 py-1 text-sm ${
+              className={`flex min-w-10 flex-1 flex-col items-center rounded border px-1 py-1 text-sm sm:min-w-12 sm:flex-none sm:px-2 ${
                 selected
                   ? "border-zinc-900 bg-zinc-900 text-white dark:border-zinc-100 dark:bg-zinc-100 dark:text-zinc-900"
                   : "border-zinc-300 dark:border-zinc-700"

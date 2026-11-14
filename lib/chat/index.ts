@@ -40,7 +40,7 @@ const tools: Anthropic.Tool[] = [
   {
     name: "my_shows",
     description:
-      "The upcoming shows that include a comedian this user has starred, soonest first, with the starred names on each.",
+      "The upcoming shows that include a comedian this user has starred, soonest first, with the starred names on each, plus a count per night of those shows and of the user's distinct comedians.",
     input_schema: { type: "object", properties: {} },
   },
   {
@@ -63,6 +63,7 @@ function seatsLeft(s: ShowRow): number | null {
 function showOut(s: ShowWithLineup) {
   return {
     date: s.showDate,
+    weekday: weekday(s.showDate),
     time: s.showTime,
     room: s.room,
     seats_left: seatsLeft(s),
@@ -95,15 +96,30 @@ async function runTool(
     }
     if (name === "my_shows") {
       const rows = await getMyShows(userId);
-      return JSON.stringify(
-        rows.map((s) => ({
+      const nights = new Map<string, { shows: number; names: Set<string> }>();
+      for (const s of rows) {
+        const night = nights.get(s.showDate) ?? { shows: 0, names: new Set() };
+        night.shows += 1;
+        for (const n of s.names) night.names.add(n);
+        nights.set(s.showDate, night);
+      }
+      return JSON.stringify({
+        nights: [...nights].map(([date, n]) => ({
+          date,
+          weekday: weekday(date),
+          show_count: n.shows,
+          your_comedians: [...n.names],
+          your_comedian_count: n.names.size,
+        })),
+        shows: rows.map((s) => ({
           date: s.showDate,
+          weekday: weekday(s.showDate),
           time: s.showTime,
           room: s.room,
           seats_left: seatsLeft(s),
           your_comedians: s.names,
         })),
-      );
+      });
     }
     if (name === "follow_comedian") {
       const { comedian, upcomingShowCount } = await followByName(
@@ -137,7 +153,10 @@ function systemPrompt(): string {
     "Answer only from tool results. If the lineups do not hold the answer, say so; there is no history of past shows, only upcoming ones.",
     "To suggest who to check out, use the credits text returned by search_shows.",
     "To follow a comedian, call follow_comedian, then say what happened and how many upcoming shows they are on.",
-    "Keep answers under 120 words. When a night has many shows, summarize it: name the shows with seats left first and at most 8 comedians in total. No markdown tables.",
+    "\"This week\" means today and the next 6 days. Use the weekday given with each date; do not work it out yourself.",
+    "For a question about which night has the most of the user's comedians, call my_shows and read the counts from its nights list; do not count yourself.",
+    "Keep answers under 120 words. When a night has many shows, summarize it: name the shows with seats left first and at most 8 comedians in total.",
+    "Write plain text only: no markdown, no asterisks, no headings, no tables. For a list, put each item on its own line starting with a hyphen.",
   ].join(" ");
 }
 

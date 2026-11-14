@@ -58,6 +58,8 @@ function buildEmail(alert: UserAlert): { subject: string; text: string; html: st
       ? `${names.join(", ")} added to a Comedy Cellar lineup`
       : `${list.length} new Comedy Cellar shows with your comedians`;
 
+  const appUrl = process.env.APP_URL?.replace(/\/+$/, "");
+
   const text = [
     "Comedians you follow were added to these lineups:",
     "",
@@ -69,6 +71,7 @@ function buildEmail(alert: UserAlert): { subject: string; text: string; html: st
         "",
       ].join("\n"),
     ),
+    ...(appUrl ? [`All your shows: ${appUrl}`] : []),
   ].join("\n");
 
   const html = `<p>Comedians you follow were added to these lineups:</p><ul>${list
@@ -78,7 +81,9 @@ function buildEmail(alert: UserAlert): { subject: string; text: string; html: st
           `${dayLabel(s.showDate)}, ${s.showTime}, ${s.room}`,
         )}<br><a href="${bookingUrl(s.showDate, s.showTime)}">Book</a></li>`,
     )
-    .join("")}</ul>`;
+    .join("")}</ul>${
+    appUrl ? `<p><a href="${appUrl}">All your shows on Cellar Night</a></p>` : ""
+  }`;
 
   return { subject, text, html };
 }

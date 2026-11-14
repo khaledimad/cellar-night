@@ -14,7 +14,7 @@ export async function askAction(
       revalidatePath("/");
       revalidatePath("/tonight");
     }
-    return { answer: result.answer };
+    return { answer: result.answer.replace(/\*\*|__|^#+\s*/gm, "") };
   } catch (e) {
     return { error: e instanceof Error ? e.message : "Something went wrong." };
   }
