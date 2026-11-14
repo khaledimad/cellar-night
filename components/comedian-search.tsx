@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useRef, useState, useTransition } from "react";
+import { useRef, useState, useTransition } from "react";
 import {
   followByNameAction,
-  searchComediansAction,
+  listAllComediansAction,
   starComedianAction,
 } from "@/app/actions/favourites";
 
@@ -13,42 +13,40 @@ const SECRET_NAME = "Super Secret Pop Up";
 const SECRET_NORM = "super secret pop up";
 
 export function ComedianSearch({
-  top,
   starredIds,
   secretStarred,
 }: {
-  top: Option[];
   starredIds: number[];
   secretStarred: boolean;
 }) {
   const [text, setText] = useState("");
   const [open, setOpen] = useState(false);
-  const [results, setResults] = useState<Option[] | null>(null);
+  const [all, setAll] = useState<Option[] | null>(null);
   const [notice, setNotice] = useState("");
   const [pending, startTransition] = useTransition();
   const box = useRef<HTMLDivElement>(null);
   const typed = text.trim();
 
-  useEffect(() => {
-    if (!typed) {
-      setResults(null);
-      return;
-    }
-    let stale = false;
-    const timer = setTimeout(async () => {
-      const found = await searchComediansAction(typed);
-      if (!stale) setResults(found);
-    }, 200);
-    return () => {
-      stale = true;
-      clearTimeout(timer);
-    };
-  }, [typed]);
+  function loadAll() {
+    if (all !== null) return;
+    listAllComediansAction().then(setAll);
+  }
+
+  const lowered = typed.toLowerCase();
+  const results =
+    all === null
+      ? null
+      : all.filter(
+          (o) =>
+            o.nameNorm !== SECRET_NORM &&
+            (!lowered ||
+              o.name.toLowerCase().includes(lowered) ||
+              o.nameNorm.includes(lowered)),
+        );
 
   function done(message: string) {
     setNotice(message);
     setText("");
-    setResults(null);
     setOpen(false);
   }
 
@@ -108,7 +106,10 @@ export function ComedianSearch({
         autoComplete="off"
         placeholder="Search comedians to follow"
         value={text}
-        onFocus={() => setOpen(true)}
+        onFocus={() => {
+          setOpen(true);
+          loadAll();
+        }}
         onChange={(e) => {
           setText(e.target.value);
           setNotice("");
@@ -120,7 +121,7 @@ export function ComedianSearch({
         {notice}
       </p>
       {open && (
-        <ul className="absolute z-10 mt-1 max-h-80 w-full overflow-auto rounded border border-zinc-300 bg-white shadow-lg dark:border-zinc-700 dark:bg-zinc-900">
+        <ul className="absolute z-10 mt-1 max-h-[60vh] w-full overflow-auto rounded border border-zinc-300 bg-white shadow-lg dark:border-zinc-700 dark:bg-zinc-900">
           {!typed && (
             <>
               <li>
@@ -136,13 +137,12 @@ export function ComedianSearch({
                   </span>
                 </button>
               </li>
-              {top.filter((o) => o.nameNorm !== SECRET_NORM).map(renderOption)}
             </>
           )}
-          {typed && results === null && (
-            <li className="px-3 py-2 text-sm text-zinc-500">Searching</li>
+          {results === null && (
+            <li className="px-3 py-2 text-sm text-zinc-500">Loading</li>
           )}
-          {typed && results !== null && results.map(renderOption)}
+          {results !== null && results.map(renderOption)}
           {typed && results !== null && results.length === 0 && (
             <li>
               <button

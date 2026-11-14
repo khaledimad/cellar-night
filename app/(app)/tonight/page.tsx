@@ -1,11 +1,12 @@
 import Link from "next/link";
 import { Suspense } from "react";
 import { formatDayChip, minutesAgoLabel } from "@/components/format";
+import { ListHideSwitch } from "@/components/list-hide-switch";
 import { getCurrentUser } from "@/components/session";
 import { BookLink, SeatText } from "@/components/show-actions";
 import { StarToggle } from "@/components/star-toggle";
 import { getStarred } from "@/lib/queries/favourites";
-import { nextDates } from "@/lib/queries/dates";
+import { getShowDates } from "@/lib/queries/dates";
 import { seatStatus } from "@/lib/queries/seat-status";
 import { getLastRefresh, getNight } from "@/lib/queries/shows";
 
@@ -39,7 +40,7 @@ function nightHref(date: string, hide: boolean): string {
 async function Night({ searchParams }: { searchParams: SearchParams }) {
   const params = await searchParams;
   const user = await getCurrentUser();
-  const dates = nextDates(7);
+  const dates = await getShowDates();
   const requested = one(params.date);
   const date = requested && dates.includes(requested) ? requested : dates[0];
   const hide = one(params.hide) === "1";
@@ -86,25 +87,7 @@ async function Night({ searchParams }: { searchParams: SearchParams }) {
       </nav>
 
       {hasSeatCounts && (
-        <Link
-          href={nightHref(date, !hide)}
-          role="switch"
-          aria-checked={hide}
-          className="flex w-fit items-center gap-2 text-sm"
-        >
-          <span
-            className={`inline-flex h-5 w-9 items-center rounded-full p-0.5 ${
-              hide ? "bg-zinc-900 dark:bg-zinc-100" : "bg-zinc-300 dark:bg-zinc-700"
-            }`}
-          >
-            <span
-              className={`h-4 w-4 rounded-full bg-white transition-transform dark:bg-zinc-900 ${
-                hide ? "translate-x-4" : ""
-              }`}
-            />
-          </span>
-          Hide sold-out shows
-        </Link>
+        <ListHideSwitch href={nightHref(date, !hide)} hide={hide} />
       )}
 
       {visible.length === 0 ? (

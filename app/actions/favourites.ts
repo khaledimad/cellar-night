@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { getCurrentUser } from "@/components/session";
-import { searchComedians } from "@/lib/queries/comedians";
+import { getAllComedians, searchComedians } from "@/lib/queries/comedians";
 import {
   followByName,
   starComedian,
@@ -43,4 +43,11 @@ export async function searchComediansAction(
 ): Promise<{ id: number; name: string; nameNorm: string }[]> {
   await getCurrentUser();
   return searchComedians(String(text).slice(0, 100));
+}
+
+export async function listAllComediansAction(): Promise<
+  { id: number; name: string; nameNorm: string }[]
+> {
+  await getCurrentUser();
+  return getAllComedians();
 }

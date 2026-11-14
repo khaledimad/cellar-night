@@ -130,13 +130,14 @@ export async function getNight(date: string): Promise<ShowWithLineup[]> {
   return attachLineups(rows);
 }
 
-// Up to 20 upcoming shows, soonest first, each with its lineup.
+// Upcoming shows, soonest first, each with its lineup; 20 unless a limit is given.
 export async function searchShows(
   opts: {
     from?: string;
     to?: string;
     comedianName?: string;
     onlyWithSeats?: boolean;
+    limit?: number;
   } = {},
 ): Promise<ShowWithLineup[]> {
   const conditions: (SQL | undefined)[] = [gt(shows.startsAt, new Date())];
@@ -168,7 +169,7 @@ export async function searchShows(
     .innerJoin(rooms, eq(rooms.id, shows.roomId))
     .where(and(...conditions))
     .orderBy(asc(shows.startsAt), asc(shows.id))
-    .limit(20);
+    .limit(Math.min(Math.max(opts.limit ?? 20, 1), 300));
   return attachLineups(rows);
 }
 

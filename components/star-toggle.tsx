@@ -24,7 +24,7 @@ export function StarToggle({
         aria-label={starred ? `Unstar ${name}` : `Star ${name}`}
         aria-pressed={starred}
         className={`px-1 text-lg leading-none ${
-          starred ? "text-amber-500" : "text-zinc-400 hover:text-amber-500"
+          starred ? "text-amber-400" : "text-zinc-400 hover:text-amber-400"
         }`}
       >
         {starred ? "★" : "☆"}

@@ -1,26 +1,216 @@
 @import "tailwindcss";
 
+/* The app is dark only: `dark:` utilities never switch on, so every class
+   resolves through the palette below whatever the device setting. */
+@custom-variant dark (&:where(.theme-alt, .theme-alt *));
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --ink: #14100e;
+  --panel: #1f1916;
+  --panel-lift: #2a221e;
+  --line: #3a2f2a;
+  --chalk: #f4ece4;
+  --dim: #a8998c;
+  --neon: #ff4d3d;
+  --amber: #ffb347;
+  --warn: #ff8a7a;
+  color-scheme: dark;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-ink: var(--ink);
+  --color-panel: var(--panel);
+  --color-line: var(--line);
+  --color-chalk: var(--chalk);
+  --color-dim: var(--dim);
+  --color-neon: var(--neon);
+  --color-amber: var(--amber);
+
+  --color-background: var(--ink);
+  --color-foreground: var(--chalk);
+
+  /* Default palette names used across the pages, pointed at club colours. */
+  --color-white: var(--panel);
+  --color-black: var(--ink);
+
+  --color-zinc-50: var(--panel);
+  --color-zinc-100: var(--panel-lift);
+  --color-zinc-200: var(--line);
+  --color-zinc-300: var(--line);
+  --color-zinc-400: var(--dim);
+  --color-zinc-500: var(--dim);
+  --color-zinc-600: var(--dim);
+  --color-zinc-700: var(--line);
+  --color-zinc-800: var(--panel-lift);
+  --color-zinc-900: var(--neon);
+  --color-zinc-950: var(--ink);
+
+  --color-red-400: var(--warn);
+  --color-red-500: var(--warn);
+  --color-red-600: var(--warn);
+  --color-red-700: var(--warn);
+
+  --color-blue-400: var(--neon);
+  --color-blue-500: var(--neon);
+  --color-blue-600: var(--neon);
+  --color-blue-700: var(--neon);
+
+  --color-amber-300: var(--amber);
+  --color-amber-400: var(--amber);
+  --color-amber-500: var(--amber);
+  --color-amber-600: var(--amber);
+
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --font-display: var(--font-bebas), Impact, "Arial Narrow", sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  html {
+    background-color: var(--ink);
+  }
+
+  /* Brick courses, barely there, under a low red glow from the stage end. */
+  body {
+    color: var(--chalk);
+    font-family: var(--font-sans);
+    background-color: var(--ink);
+    background-image:
+      radial-gradient(ellipse 90% 26rem at 50% -8rem, rgb(255 77 61 / 0.13), transparent 70%),
+      repeating-linear-gradient(0deg, transparent 0 27px, rgb(244 236 228 / 0.022) 27px 28px),
+      repeating-linear-gradient(90deg, transparent 0 63px, rgb(244 236 228 / 0.014) 63px 64px);
+    background-attachment: scroll;
+  }
+
+  ::selection {
+    background-color: var(--neon);
+    color: var(--ink);
+  }
+
+  button,
+  summary,
+  [role="button"] {
+    cursor: pointer;
+  }
+
+  button:disabled {
+    cursor: not-allowed;
+  }
+
+  ::placeholder {
+    color: var(--dim);
+    opacity: 0.75;
+  }
+
+  hr {
+    border-color: var(--line);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Unlayered on purpose, so these win over utility classes on the pages. */
+
+h1 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 2.5rem;
+  line-height: 1;
+  letter-spacing: 0.035em;
+  text-transform: uppercase;
+  color: var(--chalk);
+}
+
+h2 {
+  letter-spacing: 0.01em;
+}
+
+input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+textarea,
+select {
+  background-color: var(--panel);
+  color: var(--chalk);
+  border-color: var(--line);
+  transition: border-color 120ms, box-shadow 120ms;
+}
+
+input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: var(--neon);
+  box-shadow: 0 0 0 3px rgb(255 77 61 / 0.22);
+}
+
+input:-webkit-autofill {
+  -webkit-text-fill-color: var(--chalk);
+  box-shadow: 0 0 0 100px var(--panel) inset;
+  caret-color: var(--chalk);
+}
+
+a:focus-visible,
+button:focus-visible,
+summary:focus-visible {
+  outline: 2px solid var(--neon);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Outlined buttons pick up the accent on hover; filled ones keep their own. */
+button:where(.border):not(:disabled):hover {
+  border-color: var(--neon);
+  color: var(--chalk);
+}
+
+/* The round knob of a switch sits on a dark track, so it needs to be light. */
+.rounded-full.bg-white {
+  background-color: var(--chalk);
+}
+
+/* Text on a filled accent block reads in ink. */
+.bg-zinc-900.text-white {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.neon-sign {
+  font-family: var(--font-display);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--neon);
+  text-shadow:
+    0 0 6px rgb(255 77 61 / 0.75),
+    0 0 22px rgb(255 77 61 / 0.45),
+    0 0 48px rgb(255 77 61 / 0.25);
+}
+
+.neon-sign-flicker {
+  animation: neon-flicker 7s linear infinite;
+}
+
+@keyframes neon-flicker {
+  0%,
+  91%,
+  93.5%,
+  95%,
+  100% {
+    opacity: 1;
+  }
+  92%,
+  94% {
+    opacity: 0.55;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .neon-sign-flicker {
+    animation: none;
+  }
+}
+
+.nav-scroll {
+  scrollbar-width: none;
+}
+
+.nav-scroll::-webkit-scrollbar {
+  display: none;
 }

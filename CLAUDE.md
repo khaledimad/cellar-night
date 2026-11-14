@@ -1,10 +1,10 @@
 @AGENTS.md
 
-# Cellar Night
+# Who's at the Cellar
 
 ## What this is
 
-Cellar Night is for comedy fans who want to catch their favourite comedians at the Comedy Cellar in New York without checking the lineup page every day. A signed-in user stars comedians, sees only the upcoming shows those comedians are on (each with a link to the Cellar's own booking page), gets an email when a starred comedian is added to a lineup, checks one night with seats left, and can ask a chat about the lineups.
+Who's at the Cellar is for comedy fans who want to catch their favourite comedians at the Comedy Cellar in New York without checking the lineup page every day. A signed-in user stars comedians, sees only the upcoming shows those comedians are on (each with a link to the Cellar's own booking page), gets an email when a starred comedian is added to a lineup, checks one night with seats left, and can ask a chat about the lineups.
 
 A star is the alert. There is no separate favourites list, alert list or settings screen.
 

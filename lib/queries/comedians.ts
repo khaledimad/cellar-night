@@ -24,6 +24,18 @@ export async function searchComedians(text: string): Promise<ComedianOption[]> {
     .limit(8);
 }
 
+// Every comedian in the database, alphabetical.
+export async function getAllComedians(): Promise<ComedianOption[]> {
+  return db
+    .select({
+      id: comedians.id,
+      name: comedians.name,
+      nameNorm: comedians.nameNorm,
+    })
+    .from(comedians)
+    .orderBy(asc(comedians.name));
+}
+
 // The 10 comedians on the most shows in the next 7 days.
 export async function getTopComedians(): Promise<ComedianOption[]> {
   const now = new Date();

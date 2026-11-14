@@ -22,7 +22,16 @@ export function MyShowList({ shows }: { shows: MyShow[] }) {
               {s.room}
             </span>
           </div>
-          <div className="text-sm">{s.names.join(", ")}</div>
+          <div className="text-sm">
+            <span
+              className="mr-1 text-amber-400"
+              role="img"
+              aria-label={`${s.names.length} of your comedian${s.names.length === 1 ? "" : "s"}`}
+            >
+              {"★".repeat(Math.min(s.names.length, 5))}
+            </span>
+            {s.names.join(", ")}
+          </div>
           <div className="flex flex-wrap items-center gap-x-3 text-sm">
             <SeatText capacity={s.capacity} booked={s.booked} />
             <BookLink

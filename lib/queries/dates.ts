@@ -1,3 +1,7 @@
+import { asc, gte } from "drizzle-orm";
+import { db } from "@/lib/db";
+import { shows } from "@/lib/db/schema";
+
 const NEW_YORK = "America/New_York";
 
 // Today's date in New York as "YYYY-MM-DD".
@@ -26,4 +30,16 @@ export function nextDates(count = 7, now: Date = new Date()): string[] {
 
 export function isIsoDate(value: string): boolean {
   return /^\d{4}-\d{2}-\d{2}$/.test(value);
+}
+
+// Today in New York, then every later date that has at least one show.
+export async function getShowDates(now: Date = new Date()): Promise<string[]> {
+  const today = nyToday(now);
+  const rows = await db
+    .selectDistinct({ date: shows.showDate })
+    .from(shows)
+    .where(gte(shows.showDate, today))
+    .orderBy(asc(shows.showDate));
+  const dates = rows.map((r) => r.date).filter((d) => d !== today);
+  return [today, ...dates];
 }
