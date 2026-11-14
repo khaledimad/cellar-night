@@ -7,7 +7,6 @@ The Cellar posts its lineups a few days ahead and they change often. Finding out
 ## Links
 
 - Live app: https://www.whosatthecellar.com
-- Also at: https://cellar-night.vercel.app
 - Repo: https://github.com/khaledimad/cellar-night
 
 ## What works
