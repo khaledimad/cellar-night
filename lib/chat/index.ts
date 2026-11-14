@@ -1,4 +1,5 @@
 import Anthropic from "@anthropic-ai/sdk";
+import { bookingUrl } from "@/lib/booking";
 import { nyToday } from "@/lib/queries/dates";
 import { followByName } from "@/lib/queries/favourites";
 import {
@@ -79,6 +80,7 @@ function showOut(s: ShowWithLineup) {
     time: s.showTime,
     room: s.room,
     seats_left: seatsLeft(s),
+    booking_url: bookingUrl(s.showDate, s.showTime),
     lineup: s.lineup.map((l) => ({ name: l.name, credits: l.description })),
   };
 }
@@ -168,6 +170,7 @@ async function runTool(
           time: s.showTime,
           room: s.room,
           seats_left: seatsLeft(s),
+          booking_url: bookingUrl(s.showDate, s.showTime),
           your_comedians: s.names,
         })),
       });
@@ -210,6 +213,7 @@ function systemPrompt(): string {
     "\"This week\" means today and the next 6 days. Use the weekday given with each date; do not work it out yourself.",
     "For a question about which night has the most of the user's comedians, call my_shows and read the counts from its nights list; do not count yourself.",
     "Keep answers under 120 words. When a night has many shows, summarize it: name the shows with seats left first and at most 8 comedians in total.",
+    "Each show comes with a booking_url, the Cellar's own booking page for that show. When the user asks for a booking link, or when you recommend one or two specific shows, give that address in full on its own line; copy it exactly and never build one yourself. Do not attach links to long lists.",
     "Write plain text only: no markdown, no asterisks, no headings, no tables. For a list, put each item on its own line starting with a hyphen.",
   ].join(" ");
 }

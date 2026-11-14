@@ -13,6 +13,25 @@ const examples = [
   "Follow Mike Birbiglia for me",
 ];
 
+// Turns web addresses in an answer into links that open in a new tab.
+function linkify(text: string) {
+  return text.split(/(https:\/\/[^\s]+)/g).map((part, i) =>
+    part.startsWith("https://") ? (
+      <a
+        key={i}
+        href={part}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="break-all text-blue-700 underline"
+      >
+        Book this show
+      </a>
+    ) : (
+      part
+    ),
+  );
+}
+
 export function Chat() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [text, setText] = useState("");
@@ -78,7 +97,7 @@ export function Chat() {
                 : "whitespace-pre-wrap text-sm"
             }
           >
-            {m.content}
+            {m.role === "assistant" ? linkify(m.content) : m.content}
           </li>
         ))}
         {pending && <li className="text-sm text-zinc-500">Thinking</li>}
