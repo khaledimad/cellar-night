@@ -15,7 +15,7 @@ export default function LoginPage() {
           to a Comedy Cellar lineup.
         </p>
         <p className="text-sm italic text-dim">
-          Like the real thing, minus the stairs and the two-drink minimum.
+          The lineup changes every day. We check it so you do not have to.
         </p>
       </div>
       <LoginForm />

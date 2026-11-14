@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useTransition } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import {
   followByNameAction,
   listAllComediansAction,
@@ -26,6 +26,17 @@ export function ComedianSearch({
   const [pending, startTransition] = useTransition();
   const box = useRef<HTMLDivElement>(null);
   const typed = text.trim();
+
+  // Close the list on a tap or click outside it. A blur handler would close
+  // it before a tap on a row registers on touch screens.
+  useEffect(() => {
+    if (!open) return;
+    function onDown(e: PointerEvent) {
+      if (!box.current?.contains(e.target as Node)) setOpen(false);
+    }
+    document.addEventListener("pointerdown", onDown);
+    return () => document.removeEventListener("pointerdown", onDown);
+  }, [open]);
 
   function loadAll() {
     if (all !== null) return;
@@ -93,9 +104,6 @@ export function ComedianSearch({
     <div
       ref={box}
       className="relative"
-      onBlur={(e) => {
-        if (!box.current?.contains(e.relatedTarget as Node | null)) setOpen(false);
-      }}
     >
       <label htmlFor="comedian-search" className="sr-only">
         Search comedians
@@ -122,6 +130,10 @@ export function ComedianSearch({
       </p>
       {open && (
         <ul className="absolute z-10 mt-1 max-h-[60vh] w-full overflow-auto rounded border border-zinc-300 bg-white shadow-lg dark:border-zinc-700 dark:bg-zinc-900">
+          <li className="px-3 py-2 text-xs text-zinc-500">
+            Everyone on a posted lineup. Not here? Type the name and follow them
+            anyway.
+          </li>
           {!typed && (
             <>
               <li>
