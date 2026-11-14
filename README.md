@@ -15,8 +15,8 @@ The Cellar posts its lineups a few days ahead and they change often. Finding out
 - **Sign up, sign in and sign out** with email and password. Every page except the login page needs a signed-in user.
 - **My Comedians.** Browse every billed comedian in alphabetical order or search, star a comedian, and see only the upcoming shows your comedians are on, each with a link to the Cellar's own booking page for that show. A show with several of your comedians is marked with a star for each, and sold-out shows can be hidden. Secret pop-up shows can be starred like a comedian. A name that is not billed yet can be followed anyway.
 - **Alert email.** A star is the alert. When a starred comedian is added to a lineup, you get one email per refresh, grouped by comedian, with the date, time, room and booking link of every new show. The same show is never sent twice.
-- **Tonight.** One night at a time for every date with a posted show, one line per show, with seats left, a switch to hide sold-out shows, and each lineup one tap away with a star beside every name.
-- **Ask the Cellar.** A chat that answers questions about the upcoming lineups ("who is on Wednesday with seats left?") and can follow a comedian for you. It answers only from the database.
+- **Lineups.** One night at a time for every date with a posted show, one line per show, with seats left, a switch to hide sold-out shows, and each lineup one tap away with a star beside every name. Tap a name to read the comedian's credits.
+- **Ask the Cellar.** A chat that answers questions about the upcoming lineups ("who is on Wednesday with seats left?") and can follow a comedian for you, and gives the booking link for a show it recommends. It answers only from the database.
 - **Refresh every 2 hours.** A scheduled job reloads every date the Cellar's lineup feed holds, then the seat counts from its booking feed.
 
 ## What is incomplete

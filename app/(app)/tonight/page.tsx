@@ -19,7 +19,7 @@ export default function TonightPage({
 }) {
   return (
     <div className="flex flex-col gap-4">
-      <h1 className="text-2xl font-semibold">Tonight</h1>
+      <h1 className="text-2xl font-semibold">Lineups</h1>
       <Suspense fallback={<p className="text-sm text-zinc-500">Loading</p>}>
         <Night searchParams={searchParams} />
       </Suspense>
@@ -124,9 +124,18 @@ async function Night({ searchParams }: { searchParams: SearchParams }) {
                     {s.lineup.map((c) => (
                       <li
                         key={c.comedianId}
-                        className="flex items-center justify-between"
+                        className="flex items-start justify-between gap-3 py-0.5"
                       >
-                        <span>{c.name}</span>
+                        {c.description ? (
+                          <details className="min-w-0">
+                            <summary className="cursor-pointer">{c.name}</summary>
+                            <p className="mb-1 mt-0.5 text-zinc-600">
+                              {c.description}
+                            </p>
+                          </details>
+                        ) : (
+                          <span>{c.name}</span>
+                        )}
                         <StarToggle
                           comedianId={c.comedianId}
                           name={c.name}

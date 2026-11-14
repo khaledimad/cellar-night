@@ -27,7 +27,7 @@ A star is the alert. There is no separate favourites list, alert list or setting
 | `proxy.ts` | Route guard: signed-out visitors go to `/login` |
 | `app/login` | Sign-up and sign-in page |
 | `app/auth` | Auth server actions: `signUp`, `signIn`, `signOut` |
-| `app/(app)` | Signed-in pages: My comedians (`/`), Tonight (`/tonight`), Ask the Cellar (`/ask`) |
+| `app/(app)` | Signed-in pages: My Comedians (`/`), Lineups (`/tonight`), Ask the Cellar (`/ask`) |
 | `app/api/ingest` | Protected refresh route |
 | `app/actions` | Server actions for starring and for the chat |
 | `components` | UI parts |
