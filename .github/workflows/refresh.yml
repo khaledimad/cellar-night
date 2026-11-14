@@ -1,0 +1,22 @@
+name: Refresh lineups
+
+on:
+  schedule:
+    - cron: "0 */2 * * *"
+  workflow_dispatch:
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call the refresh route
+        env:
+          APP_URL: ${{ secrets.APP_URL }}
+          INGEST_SECRET: ${{ secrets.INGEST_SECRET }}
+        run: |
+          status=$(curl -sS -m 290 -o response.json -w "%{http_code}" \
+            -X POST "$APP_URL/api/ingest" \
+            -H "x-ingest-secret: $INGEST_SECRET")
+          cat response.json
+          echo
+          test "$status" = "200"
