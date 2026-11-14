@@ -34,8 +34,9 @@ yarn-error.log*
 .env*
 !.env.example
 
-# local agent settings
+# local agent and browser tool output
 .claude/
+.playwright-mcp/
 
 # vercel
 .vercel
